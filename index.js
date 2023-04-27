@@ -27212,14 +27212,13 @@
   var import_deep_equal = __toESM(require_deep_equal(), 1);
 
   // node_modules/@deriv-experiments/react/src/auth.ts
-  var CLIENT_ID = "36300";
   var REDIRECT_URI = encodeURIComponent("https://localhost/example/");
   var AUTHORIZATION_URL = "https://oauth.deriv.com/oauth2/authorize";
   var SCOPES = encodeURIComponent("your_scopes");
-  function startOAuthFlow() {
+  function startOAuthFlow(clientId) {
     const state = Math.random().toString(36).substring(7);
     localStorage.setItem("oauth2_state", state);
-    const url = `${AUTHORIZATION_URL}?app_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES}&response_type=token&state=${state}`;
+    const url = `${AUTHORIZATION_URL}?app_id=${clientId}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES}&response_type=token&state=${state}`;
     window.location.href = url;
   }
   function getAccessTokenFromUrl() {
@@ -27254,6 +27253,7 @@
   var import_react3 = __toESM(require_react(), 1);
 
   // node_modules/@deriv-experiments/react/src/index.ts
+  var websocketUrl;
   var eventEmitter = new import_events.default();
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
@@ -27299,7 +27299,13 @@
     navigator.serviceWorker.controller.postMessage(args);
   }
   eventEmitter.login = () => {
-    startOAuthFlow();
+    if (!websocketUrl) {
+      return;
+    }
+    const url = new URL(websocketUrl);
+    startOAuthFlow(
+      url.searchParams.get("app_id")
+    );
   };
   eventEmitter.subscribe = (message, callback) => {
     eventEmitter.on("change", (reply) => {
@@ -27312,6 +27318,7 @@
   };
   eventEmitter.send = send;
   eventEmitter.setWebsocketUrl = (url) => {
+    websocketUrl = url;
     send("setWebsocketUrl", url);
   };
   var src_default = eventEmitter;

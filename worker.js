@@ -5,7 +5,6 @@
   var websocketUrl;
   var authorize;
   var connection;
-  console.log(1234);
   var wsLog = [];
   var wsPush = (type, message) => {
     wsLog.push([type, message]);

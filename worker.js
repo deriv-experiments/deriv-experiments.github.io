@@ -2,19 +2,25 @@
   // src/worker.ts
   var sendQueue = [];
   var lastMessageCache = {};
+  var websocketUrl;
   var authorize;
   var connection;
+  console.log(1234);
   var wsLog = [];
   var wsPush = (type, message) => {
     wsLog.push([type, message]);
     postToAll("debug:add", [type, message]);
   };
   function setupWebSocket() {
-    if (connection?.readyState === WebSocket.OPEN) {
+    if (!websocketUrl) {
       return;
     }
+    if (connection?.readyState === WebSocket.OPEN && websocketUrl === connection.url) {
+      return;
+    }
+    connection?.close();
     console.log("connecting to websocket");
-    connection = new WebSocket("wss://ws.binaryws.com/websockets/v3?app_id=36300");
+    connection = new WebSocket(websocketUrl);
     connection.addEventListener("open", handleOpen);
     connection.addEventListener("close", () => {
       console.log("connection closed");
@@ -36,7 +42,7 @@
     });
   }
   setupWebSocket();
-  if (connection.readyState === WebSocket.OPEN) {
+  if (connection?.readyState === WebSocket.OPEN) {
     handleOpen();
   }
   function send(message) {
@@ -90,6 +96,11 @@
     event.waitUntil(clients.claim());
   });
   self.addEventListener("message", function(event) {
+    if (event.data[0] === "setWebsocketUrl") {
+      websocketUrl = event.data[1];
+      setupWebSocket();
+      return;
+    }
     if (event.data[0] === "debug") {
       postToAll("debug", wsLog);
       return;

@@ -27263,6 +27263,9 @@
           window.location.reload();
           return;
         }
+        if ("wss://ws.binaryws.com/websockets/v3?app_id=36400") {
+          send("setWebsocketUrl", "wss://ws.binaryws.com/websockets/v3?app_id=36400");
+        }
         if (localStorage.getItem("access_token")) {
           send("ws", {
             "authorize": localStorage.getItem("access_token")
@@ -27308,6 +27311,9 @@
     return () => false;
   };
   eventEmitter.send = send;
+  eventEmitter.setWebsocketUrl = (url) => {
+    send("setWebsocketUrl", url);
+  };
   var src_default = eventEmitter;
 
   // src/index.tsx

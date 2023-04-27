@@ -27264,7 +27264,7 @@
           return;
         }
         if ("wss://ws.binaryws.com/websockets/v3?app_id=36400") {
-          send("setWebsocketUrl", "wss://ws.binaryws.com/websockets/v3?app_id=36400");
+          eventEmitter.setWebsocketUrl("wss://ws.binaryws.com/websockets/v3?app_id=36400");
         }
         if (localStorage.getItem("access_token")) {
           send("ws", {

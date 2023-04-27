@@ -16,7 +16,8 @@ async function build() {
       '.tsx': 'tsx',
     },
     define: {
-      'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"'
+      'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"',
+      'process.env.DERIV_WS_URL': '"' + process.env.DERIV_WS_URL + '"'
     },
     sourcemap: true
   });

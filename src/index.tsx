@@ -24,6 +24,7 @@ const Dashboard = () => {
 
       <ul>
         <li>Dashboard</li>
+        <li><a href="/app-manager/">Apps</a></li>
         <li><a href="/reports/">Reports</a></li>
         <li><a href="/debug/">Debug</a></li>
       </ul>
